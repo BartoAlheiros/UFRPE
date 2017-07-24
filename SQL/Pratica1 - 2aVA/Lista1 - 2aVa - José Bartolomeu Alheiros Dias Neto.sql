@@ -32,7 +32,7 @@ FROM
 WHERE p.nome = 'Sirenio Arruda';   							
 
 #5
-SELECT p.nome, d.codigo_disciplina
+SELECT d.codigo_disciplina as cod_disciplina, p.nome as monitor
 FROM 
 	disciplina d JOIN turma t 
 		ON d.codigo_disciplina = t.codigo_disciplina
@@ -46,7 +46,7 @@ GROUP BY(d.codigo_disciplina)
 HAVING d.codigo_disciplina <= 3;  
 
 #6
-SELECT p.nome as pessoa, p2.nome as lider
+SELECT p.nome as professor, p2.nome as professor_lider
 FROM 
 	professor prof JOIN pessoa p 
 		ON prof.matricula_professor = p.matricula_pessoa
@@ -73,3 +73,21 @@ FROM
 	professor prof JOIN pessoa p
 		ON prof.matricula_professor = p.matricula_pessoa
 WHERE prof.data_admissao < '1995' OR prof.data_admissao > '2005';
+
+#9
+SELECT COUNT(t.codigo_disciplina)  
+FROM
+	professor prof JOIN ministra m
+		ON prof.matricula_professor = m.matricula_professor
+    JOIN turma t
+		ON t.codigo_disciplina = m.codigo_disciplina
+    JOIN pessoa p
+		ON p.matricula_pessoa = prof.matricula_professor
+WHERE p.nome = 'Jose Alcantara';
+
+#10 - adaptado para mostrar o no da matricula de cada aluno
+SELECT p.matricula_aluno, p.ano_semestre, p.codigo_curso, p.codigo_disciplina, AVG(p.nota) as media_aluno
+FROM 
+	prova p
+GROUP BY p.ano_semestre, p.codigo_curso, p.codigo_disciplina, p.matricula_aluno   
+;
