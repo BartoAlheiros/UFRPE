@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `assistech` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `assistech`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: assistech
 -- ------------------------------------------------------
--- Server version	5.7.18-log
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,17 +25,20 @@ DROP TABLE IF EXISTS `contrato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contrato` (
-  `COD` varchar(5) NOT NULL,
+  `COD_Contrato` varchar(5) NOT NULL DEFAULT '',
   `DataInicio` date DEFAULT NULL,
   `DataFim` date DEFAULT NULL,
   `StatusContrato` enum('Aberto','Finalizado') DEFAULT NULL,
   `ID_Documento` varchar(10) NOT NULL,
   `ID_Tipo_Contrato` varchar(5) NOT NULL,
-  PRIMARY KEY (`COD`,`ID_Documento`,`ID_Tipo_Contrato`),
+  `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
+  PRIMARY KEY (`COD_Contrato`,`ID_Documento`,`ID_Tipo_Contrato`,`Cod_Equipamento`),
   KEY `contrato_ID_Documento_fk` (`ID_Documento`),
   KEY `contrato_ID_Tipo_Contrato_fk` (`ID_Tipo_Contrato`),
+  KEY `contrato_equipamento_fk` (`Cod_Equipamento`),
   CONSTRAINT `contrato_ID_Documento_fk` FOREIGN KEY (`ID_Documento`) REFERENCES `documento` (`ID_Documento`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `contrato_ID_Tipo_Contrato_fk` FOREIGN KEY (`ID_Tipo_Contrato`) REFERENCES `tipo_contrato` (`ID_Tipo_Contrato`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `contrato_ID_Tipo_Contrato_fk` FOREIGN KEY (`ID_Tipo_Contrato`) REFERENCES `tipo_contrato` (`ID_Tipo_Contrato`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `contrato_equipamento_fk` FOREIGN KEY (`Cod_Equipamento`) REFERENCES `equipamento` (`Cod_Equipamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -102,6 +105,34 @@ LOCK TABLES `empresa` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `equipamento`
+--
+
+DROP TABLE IF EXISTS `equipamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `equipamento` (
+  `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
+  `StatusEquip` enum('Bom','Regular','Ruim') DEFAULT NULL,
+  `FabricanteEquip` varchar(30) DEFAULT NULL,
+  `HistoricoEquip` varchar(40) DEFAULT NULL,
+  `DescricaoEquip` varchar(50) DEFAULT NULL,
+  `SetorEquip` varchar(20) DEFAULT NULL,
+  `DataEntradaEquip` date DEFAULT NULL,
+  PRIMARY KEY (`Cod_Equipamento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `equipamento`
+--
+
+LOCK TABLES `equipamento` WRITE;
+/*!40000 ALTER TABLE `equipamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `equipamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tipo_contrato`
 --
 
@@ -162,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-24 11:14:03
+-- Dump completed on 2017-07-26 21:43:35
