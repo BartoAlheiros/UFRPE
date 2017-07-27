@@ -111,3 +111,88 @@ SetorEquip VARCHAR(20),
 DataEntradaEquip DATE,
 CONSTRAINT equipamento_pk primary key(Cod_Equipamento)
 );
+
+#TABELA COMPUTADOR
+#CREATE TABLE computador(
+
+
+
+#TABELA ORDEM DE SERVICO
+CREATE TABLE ordem_de_servico(
+Num_OS VARCHAR(10),
+Status_OS ENUM('Aberto', 'Fechado'),
+DataCricao_OS DATE,
+PrazoEmDiasOS DATE,
+DtDevida DATE,
+CodOrcamento VARCHAR(10),
+CONSTRAINT ordem_de_servico_pk primary key(Num_OS),
+CONSTRAINT ordem_de_servico_fk foreign key(CodOrcamento) references orcamento(CodOrcamento)
+);
+
+
+#TABELA ORCAMENTO
+CREATE TABLE orcamento(
+CodOrcamento VARCHAR(10),
+DescOrcamento VARCHAR(50),
+DtAbert_Orcto DATE,
+DtEmissao_Orcto DATE,
+ValidadeEmDias_Orcto DATE,
+UltimaData_Orcto DATE,
+CONSTRAINT orcamento_pk primary key(CodOrcamento));
+
+#adicionando coluna 
+ALTER TABLE orcamento ADD Num_OS VARCHAR(10);
+#inserindo chave estrangeira orcamento-os NumOS à tabela orcamento
+ALTER TABLE orcamento  
+	ADD CONSTRAINT orcamento_os_fk foreign key(Num_OS) references ordem_de_servico(Num_OS);
+    
+CREATE TABLE funcionario(
+Matricula VARCHAR(10),
+Cod_Contracheque VARCHAR(10),
+Sequencial_Dependente VARCHAR(12),
+Id_Jornada_Trabalho VARCHAR(8),
+Login VARCHAR(15),
+Senha VARCHAR(8),
+Nome VARCHAR(15),
+Cpf INTEGER(9),
+Email VARCHAR(12),
+Carga_hora INTEGER(10),
+CONSTRAINT funcionario_pk primary key(Matricula)
+);
+
+#ADD CONSTRAINT funcionario_contracheque_fk foreign key(Cod_Contracheque) references contracheque(Codigo),
+#ADD CONSTRAINT funcionario_dependente_fk foreign key(Sequencial_Dependente) references dependente(Sequencial),
+
+#Definindo Id_jornada_Trabalho como chave estrangeira para a jornada de trabalho, na tabela de funcionario.
+ALTER TABLE funcionario
+	ADD CONSTRAINT funcionario_jornada_trabalho_fk foreign key(Id_Jornada_Trabalho) references jornada_trabalho(ID_Jornada_Trabalho);
+
+CREATE TABLE dependente(
+Sequencial INTEGER(10),
+Sexo VARCHAR(1),
+Data_Nascimento DATE,
+Parentesco VARCHAR(8),
+Idade INTEGER(3),
+CONSTRAINT dependente_pk primary key(matricula, Sequencial)
+CONSTRAINT dependente_fk foreign key(Sequencial, Matricula)
+);
+
+CREATE TABLE contracheque(
+Codigo INTEGER(14),
+Data_Contracheque DATE,
+Horas_extras INTEGER(10),
+Salario_Base INTEGER(9),
+Adicional_Salario INTEGER(9),
+CONSTRAINT contracheque_pk primary key(Codigo)
+);
+
+CREATE TABLE jornada_trabalho( 
+ID_Jornada_Trabalho VARCHAR(8), 
+Horario_Inicio INTEGER, 
+Horario_Fim INTEGER, 
+Trabalha_Sabado VARCHAR(5), 
+Descricao VARCHAR(7), 
+CONSTRAINT jornada_trabalho_pk primary key(ID_Jornada_Trabalho) 
+);
+
+    
