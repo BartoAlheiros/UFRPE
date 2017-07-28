@@ -145,7 +145,8 @@ ALTER TABLE orcamento ADD Num_OS VARCHAR(10);
 #inserindo chave estrangeira orcamento-os NumOS à tabela orcamento
 ALTER TABLE orcamento  
 	ADD CONSTRAINT orcamento_os_fk foreign key(Num_OS) references ordem_de_servico(Num_OS);
-    
+
+#Criando tabela funcionário.    
 CREATE TABLE funcionario(
 Matricula VARCHAR(10),
 Cod_Contracheque VARCHAR(10),
@@ -169,12 +170,13 @@ ALTER TABLE funcionario
 
 CREATE TABLE dependente(
 Sequencial INTEGER(10),
+Matricula_Func VARCHAR(10),
 Sexo VARCHAR(1),
 Data_Nascimento DATE,
 Parentesco VARCHAR(8),
 Idade INTEGER(3),
-CONSTRAINT dependente_pk primary key(matricula, Sequencial)
-CONSTRAINT dependente_fk foreign key(Sequencial, Matricula)
+CONSTRAINT dependente_pk primary key(Matricula_Func, Sequencial),
+CONSTRAINT dependente_funcionario_fk foreign key(Matricula_Func) references funcionario(Matricula)
 );
 
 CREATE TABLE contracheque(
@@ -195,4 +197,25 @@ Descricao VARCHAR(7),
 CONSTRAINT jornada_trabalho_pk primary key(ID_Jornada_Trabalho) 
 );
 
+#alterando o tipo de dado de Código em contracheque de Integer pra Varchar.
+ALTER TABLE contracheque	
+	CHANGE Codigo Codigo VARCHAR(14);
+#Adicionando código de contracheque à tabela funcionário e tornando-o uma chave estrangeira para tabela contracheque.
+ALTER TABLE funcionario 
+	ADD CONSTRAINT funcionario_contracheque_fk foreign key(Cod_Contracheque) references contracheque(Codigo);
+
+CREATE TABLE adm_financeiro(
+Matricula VARCHAR(10),
+CONSTRAINT adm_financeiro_pk primary key(Matricula),
+CONSTRAINT adm_financeiro_funcionario_fk foreign key(Matricula) references funcionario(Matricula)
+);
+
+ALTER TABLE adm_financeiro
+	ADD Cod_Contracheque VARCHAR(14),
+    ADD CONSTRAINT adm_fincanceiro_contracheque foreign key(Cod_Contracheque) references contracheque(Codigo);
     
+ALTER TABLE contracheque
+	ADD CONSTRAINT contracheque_admin_financeiro_fk foreign key(Matricula_Admin_Financeiro) references adm_financeiro(Matricula);
+    
+ALTER TABLE adm_financeiro
+	DROP foreign key adm_fincanceiro_contracheque;

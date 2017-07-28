@@ -18,6 +18,60 @@ USE `assistech`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `adm_financeiro`
+--
+
+DROP TABLE IF EXISTS `adm_financeiro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `adm_financeiro` (
+  `Matricula` varchar(10) NOT NULL DEFAULT '',
+  `Cod_Contracheque` varchar(14) DEFAULT NULL,
+  PRIMARY KEY (`Matricula`),
+  KEY `adm_fincanceiro_contracheque` (`Cod_Contracheque`),
+  CONSTRAINT `adm_financeiro_funcionario_fk` FOREIGN KEY (`Matricula`) REFERENCES `funcionario` (`Matricula`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `adm_financeiro`
+--
+
+LOCK TABLES `adm_financeiro` WRITE;
+/*!40000 ALTER TABLE `adm_financeiro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `adm_financeiro` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `contracheque`
+--
+
+DROP TABLE IF EXISTS `contracheque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contracheque` (
+  `Matricula_Admin_Financeiro` varchar(10) DEFAULT NULL,
+  `Codigo` varchar(14) NOT NULL DEFAULT '',
+  `Data_Contracheque` date DEFAULT NULL,
+  `Horas_extras` int(10) DEFAULT NULL,
+  `Salario_Base` int(9) DEFAULT NULL,
+  `Adicional_Salario` int(9) DEFAULT NULL,
+  PRIMARY KEY (`Codigo`),
+  KEY `contracheque_admin_fincanceiro_fk_idx` (`Matricula_Admin_Financeiro`),
+  CONSTRAINT `contracheque_admin_financeiro_fk` FOREIGN KEY (`Matricula_Admin_Financeiro`) REFERENCES `adm_financeiro` (`Matricula`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contracheque`
+--
+
+LOCK TABLES `contracheque` WRITE;
+/*!40000 ALTER TABLE `contracheque` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contracheque` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `contrato`
 --
 
@@ -31,14 +85,11 @@ CREATE TABLE `contrato` (
   `StatusContrato` enum('Aberto','Finalizado') DEFAULT NULL,
   `ID_Documento` varchar(10) NOT NULL,
   `ID_Tipo_Contrato` varchar(5) NOT NULL,
-  `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
   PRIMARY KEY (`COD_Contrato`),
   KEY `contrato_ID_Documento_fk` (`ID_Documento`),
   KEY `contrato_ID_Tipo_Contrato_fk` (`ID_Tipo_Contrato`),
-  KEY `contrato_equipamento_fk` (`Cod_Equipamento`),
   CONSTRAINT `contrato_ID_Documento_fk` FOREIGN KEY (`ID_Documento`) REFERENCES `documento` (`ID_Documento`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `contrato_ID_Tipo_Contrato_fk` FOREIGN KEY (`ID_Tipo_Contrato`) REFERENCES `tipo_contrato` (`ID_Tipo_Contrato`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `contrato_equipamento_fk` FOREIGN KEY (`Cod_Equipamento`) REFERENCES `equipamento` (`Cod_Equipamento`)
+  CONSTRAINT `contrato_ID_Tipo_Contrato_fk` FOREIGN KEY (`ID_Tipo_Contrato`) REFERENCES `tipo_contrato` (`ID_Tipo_Contrato`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,6 +100,34 @@ CREATE TABLE `contrato` (
 LOCK TABLES `contrato` WRITE;
 /*!40000 ALTER TABLE `contrato` DISABLE KEYS */;
 /*!40000 ALTER TABLE `contrato` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dependente`
+--
+
+DROP TABLE IF EXISTS `dependente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dependente` (
+  `Sequencial` int(10) NOT NULL DEFAULT '0',
+  `Matricula_Func` varchar(10) NOT NULL DEFAULT '',
+  `Sexo` varchar(1) DEFAULT NULL,
+  `Data_Nascimento` date DEFAULT NULL,
+  `Parentesco` varchar(8) DEFAULT NULL,
+  `Idade` int(3) DEFAULT NULL,
+  PRIMARY KEY (`Matricula_Func`,`Sequencial`),
+  CONSTRAINT `dependente_funcionario_fk` FOREIGN KEY (`Matricula_Func`) REFERENCES `funcionario` (`Matricula`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dependente`
+--
+
+LOCK TABLES `dependente` WRITE;
+/*!40000 ALTER TABLE `dependente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dependente` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -112,13 +191,16 @@ DROP TABLE IF EXISTS `equipamento`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `equipamento` (
   `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
+  `Cod_Contrato` varchar(5) DEFAULT NULL,
   `StatusEquip` enum('Bom','Regular','Ruim') DEFAULT NULL,
   `FabricanteEquip` varchar(30) DEFAULT NULL,
   `HistoricoEquip` varchar(40) DEFAULT NULL,
   `DescricaoEquip` varchar(50) DEFAULT NULL,
   `SetorEquip` varchar(20) DEFAULT NULL,
   `DataEntradaEquip` date DEFAULT NULL,
-  PRIMARY KEY (`Cod_Equipamento`)
+  PRIMARY KEY (`Cod_Equipamento`),
+  KEY `equipamento_contrato_fk_idx` (`Cod_Contrato`),
+  CONSTRAINT `equipamento_contrato_fk` FOREIGN KEY (`Cod_Contrato`) REFERENCES `contrato` (`COD_Contrato`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -151,6 +233,8 @@ CREATE TABLE `funcionario` (
   `Carga_hora` int(10) DEFAULT NULL,
   PRIMARY KEY (`Matricula`),
   KEY `funcionario_jornada_trabalho_fk` (`Id_Jornada_Trabalho`),
+  KEY `funcionario_contracheque_fk` (`Cod_Contracheque`),
+  CONSTRAINT `funcionario_contracheque_fk` FOREIGN KEY (`Cod_Contracheque`) REFERENCES `contracheque` (`Codigo`),
   CONSTRAINT `funcionario_jornada_trabalho_fk` FOREIGN KEY (`Id_Jornada_Trabalho`) REFERENCES `jornada_trabalho` (`ID_Jornada_Trabalho`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -308,4 +392,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-27 18:17:19
+-- Dump completed on 2017-07-27 21:37:07
