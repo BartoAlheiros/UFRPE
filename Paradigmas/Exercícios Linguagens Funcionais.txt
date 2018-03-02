@@ -1,0 +1,36 @@
+#para retornar se uma lista tem todos os seus elementos iguais.
+IGUAIS(LIST X): Boolean
+	IF(x.len() == 2)
+		Return(x.head() == x.tail().head())
+	ELSE
+		IF(x.head() == x.tail().head())
+			IGUAIS(x.tail())
+		ELSE
+			Return false;
+			
+
+#recebe dois valores e retorna o menor			
+menorDeDois(Int valor1, Int valor2): Int
+	IF(valor1 < valor2)
+		Return valor1;
+	ELSEIF(valor2 > valor1)
+		Return valor2;
+		
+
+menorDeTres(Int valor1, Int valor2, Int valor3): Int
+	IF(valor1 < (valor2 + valor3))
+		return valor1;
+	ELSE
+		IF(valor2 < valor1 + valor3)
+			Return valor 2;
+		ELSE
+			Return valor3;
+			
+fatorial(Int n): Int
+	IF(n == 0)
+		Return 1;
+	ELSE
+		Return n * fatorial(n - 1)
+		
+pertence(List x, Int n): Boolean
+	
