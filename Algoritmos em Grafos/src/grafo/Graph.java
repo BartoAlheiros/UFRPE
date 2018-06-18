@@ -10,17 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /*Classe que se refere ao Grafo em si e todas as suas componentes.*/
-public class Graph {
-  public ArrayList<Node> nodes;
+public abstract class Graph {
 
-  public Graph () {
+	public Graph () {
   	
   }
   
-  public Graph (ArrayList<Node> n) {
-    this.nodes = n;
-  }
-  
+	public abstract void carregaArquivo();
   /*public void carregaArquivo () {
   	FileReader arq;
 
