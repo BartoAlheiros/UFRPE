@@ -13,8 +13,8 @@ public class Node {
   }
   
   public Node(String r, int v) {
-  	this.v = v;
   	this.r = r;
+  	this.v = v;
   	this.adj = new ArrayList<Node>();
   }
   
