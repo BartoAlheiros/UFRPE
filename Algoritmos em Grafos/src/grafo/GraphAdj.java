@@ -31,37 +31,15 @@ public class GraphAdj extends Graph {
 			arq = new FileReader("./grafos/grafo1.grf");
 			entrada = new FileInputStream("./grafos/grafo1.grf");
 			InputStreamReader entradaFormatada = new InputStreamReader(entrada);
-			Graph g = new GraphAdj();
-			BufferedReader lerArq = new BufferedReader(arq);
+			int c = entradaFormatada.read();
 			
-			// lê a primeira linha do arquivo e armazena na variavel inteira numVertices
-			int numVertices = Integer.parseInt(lerArq.readLine());   
-
-			/* Laço que percorre todas as linhas do arquivo após a primira.*/
-			for (int i = 0; i < numVertices; i++) {
-				int j = 0;
-				String linha = lerArq.readLine();
-				/* Pega próxima linha e a divide em cada espaco(" ") e salva em um Array(str). */
-				String[] str = linha.split(" "); 
-				ArrayList<Node> adj = new ArrayList<>(); // instanciando lista de adjacências do nó. 
-				Node node = new Node(str[j]);		/* cria um novo nó, passando o rótulo do mesmo.*/
-
-				/* adiciona o nó à lista nodes desta instância de grafo(this).*/
-				this.nodes.add(node);
-				j++;
-				
-				/* Preenchendo a lista de adjacências (adj) do nó. */
-				while ( !(str[j].equals('\n') ) ) {
-					if ( j == 0 & !(this.nodes.contains(node)) ) {
-						node.setR(str[j]);
-					} else if ( j != 0 ) {
-						adj.add(node);
-					}
-					j++;
-				}
-				this.nodes.add(node);
-			}
-			lerArq.close();
+			while( c!=-1){
+				if ((char) c == '\n')
+					System.out.println("Achei um enter!");
+	    	System.out.print( (char) c);
+	    	c = entradaFormatada.read();
+	    }
+		
 		} catch (IOException e) {
 			System.err.printf("Erro na leitura do arquivo: %s.\n", e.getMessage());
 		}
