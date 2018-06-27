@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-  	
+
 	public static void main(String[] args) {
 		Graph g = new GraphAdj();
-		
+
 		g.carregaArquivo();
 		/*Arestas do Vértice 1*/  
 		/*ArrayList<Aresta> arestasV1 = new ArrayList<Aresta>();
@@ -66,4 +66,46 @@ public class Main {
       System.out.println(vertice.e);
     }*/
 	}
+
+	static void carregaArquivo() {
+		Graph g = new GraphAdj();
+		FileReader arq;
+
+		try {
+			arq = new FileReader("./grafos/grafo1.grf");
+
+			BufferedReader lerArq = new BufferedReader(arq);
+			String linha = "", r = ""; // r é o rótulo do nó.
+
+			// lê a primeira linha do arquivo e armazena na variavel inteira numVertices
+			int numVertices = Integer.parseInt(lerArq.readLine());   
+
+			/* Laço que percorre todas as linhas do arquivo e salva(...)*/
+			for (int i = 0; i < numVertices; i++) {
+				int j = 0;
+
+				String[] strB = linha.split(" ");
+				Node nd = new Node();
+				ArrayList<Node> adj = new ArrayList<>(); // adj é a lista de adjacências do nó. 
+
+				/* Lê uma linha do arquivo. */
+				while (strB[j].equals('\n') == false) {
+					if (j == 0) {
+						r = strB[0]; // se a posição do contador for 0, insere a string lida em uma variável r, que é o rótulo do nó 
+					} else {
+						/*Se não for da posição 0, temos arestas para a lista de adjacencias. Assim,
+						 * simplismente elas são adicionadas a lista de adjacencias do nó.*/
+
+						adj.add(new Node(strB[j]));
+
+					}
+				}
+				j++;	
+			}
+		} catch (IOException e) {
+			System.err.printf("Erro na leitura do arquivo: %s.\n", e.getMessage());
+		}
+
+	}
+
 }
