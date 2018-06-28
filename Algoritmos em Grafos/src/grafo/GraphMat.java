@@ -7,12 +7,4 @@ public class GraphMat extends Graph {
 		super();
 		this.mat = new String[nodeNumber][nodeNumber];
 	}
-
-	@Override
-	public void carregaArquivo() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 }

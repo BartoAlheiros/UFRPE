@@ -9,8 +9,9 @@ public class Node {
 
 	public Node() {}
 
-	public Node(int v) {
-		this.v = v;
+	public Node(String r) {
+		this.v = 0;
+		this.r = r;
 		this.adj = new ArrayList<>();
 	}
 
@@ -22,6 +23,10 @@ public class Node {
 
 	public void setR(String r) {
 		this.r = r;
+	}
+	
+	public void setV(int v) {
+		this.v = v;
 	}
 
 	public ArrayList<Node> getAdj() {

@@ -17,7 +17,7 @@ public class Main {
 	public static void main(String[] args) {
 		Graph g = new GraphAdj();
 
-		g.carregaArquivo();
+		//g.carregaArquivo();
 		/*Arestas do Vértice 1*/  
 		/*ArrayList<Aresta> arestasV1 = new ArrayList<Aresta>();
     arestasV1.add(new Aresta("2"));
