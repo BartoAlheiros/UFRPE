@@ -24,4 +24,8 @@ public class GraphAdj extends Graph {
 	public ArrayList<Node> getNodes() {
 		return this.nodes;
 	}
+	
+	public void setNode(Node n) {
+		this.nodes.add(n);
+	}
 }

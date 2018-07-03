@@ -1,24 +1,21 @@
 package grafo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Node {
 	private String r; // rótulo do Nó
 	public int v; // valor do Nó
-	private ArrayList<Node> adj; // lista de adjacências do Nó
+	private ArrayList<Integer> adj; // lista de adjacências do Nó
 
-	public Node() {}
-
-	public Node(String r) {
-		this.v = 0;
-		this.r = r;
+	public Node() {
 		this.adj = new ArrayList<>();
 	}
 
-	public Node(String r, int v) {
-		this.r = r;
+	public Node(int v, String r) {
 		this.v = v;
-		this.adj = new ArrayList<Node>();
+		this.r = r;
+		this.adj = new ArrayList<>();
 	}
 
 	public void setR(String r) {
@@ -29,12 +26,16 @@ public class Node {
 		this.v = v;
 	}
 
-	public ArrayList<Node> getAdj() {
+	public ArrayList<Integer> getAdj() {
 		return this.adj;
 	}
 
 	public String toString() {
-		return Integer.toString(this.v);  
+		return this.r + " " + Integer.toString(this.v) + " - " + Arrays.toString(this.adj.toArray());
+	}
+	
+	public void setAdj(ArrayList<Integer> adj) {
+		this.adj = adj;
 	}
 
 	public boolean equals(String r, int v) {
